@@ -17,6 +17,11 @@
             <input type="submit" onclick="return validateForm()" value="Zapisz"/>
             <button type="button" onclick="window.location.href='/servlets/list'"> Anuluj </button>
         </form>
+
+        <label> Private field counter: ${privateFieldCounter}</label>
+        <label> ServletContext counter: ${servletContextCounter}</label>
+        <label> Session counter: ${servletSessionCounter}</label>
+
     </body>
 </html>
 

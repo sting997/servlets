@@ -1,10 +1,12 @@
 package pl.epoint.mkowalczyk.servlets;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -16,13 +18,55 @@ import java.math.BigDecimal;
 @WebServlet("/edit/*")
 class EditServlet extends HttpServlet {
     private ProductManager productManager = ProductMemoryManagerImpl.INSTANCE;
+    private int privateFieldCounter;
+    private final String EDIT_JSP_PATH = "/WEB-INF/edit.jsp";
 
-    //TODO refactor
+    @Override
+    public void init() {
+        privateFieldCounter = 0;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        incrementCounters(req);
+        setRequestAttributes(req);
+        req.getRequestDispatcher(EDIT_JSP_PATH).forward(req, resp);
+    }
+
+    private void incrementCounters(HttpServletRequest req) {
+        incrementPrivateFieldCounter();
+        incrementServletContextCounter(req);
+        incrementSessionCounter(req);
+    }
+
+    private void incrementSessionCounter(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        Integer servletSessionCounter = (Integer) session.getAttribute("servletSessionCounter");
+        if (servletSessionCounter == null)
+            servletSessionCounter = Integer.valueOf(1);
+        else
+            servletSessionCounter = Integer.valueOf(servletSessionCounter.intValue() + 1);
+        session.setAttribute("servletSessionCounter", servletSessionCounter);
+    }
+
+    private void incrementServletContextCounter(HttpServletRequest req) {
+        ServletContext servletContext = req.getServletContext();
+        Integer servletContextCounter = (Integer) servletContext.getAttribute("servletContextCounter");
+        if (servletContextCounter == null)
+            servletContextCounter = Integer.valueOf(1);
+        else
+            servletContextCounter = Integer.valueOf(servletContextCounter.intValue() + 1);
+        servletContext.setAttribute("servletContextCounter", servletContextCounter);
+    }
+
+    private void incrementPrivateFieldCounter() {
+        privateFieldCounter++;
+    }
+
+    private void setRequestAttributes(HttpServletRequest req) {
         Integer productID = getProductIdFromRequest(req);
         req.setAttribute("productId", productID);
-        req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
+        req.setAttribute("privateFieldCounter", privateFieldCounter);
     }
 
     private Integer getProductIdFromRequest(HttpServletRequest req) {
