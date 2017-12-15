@@ -32,9 +32,8 @@
         <button type="submit"> Dodaj produkt </button>
     </form>
 
-    <label> Private field counter: ${privateFieldCounter}</label>
-    <label> ServletContext counter: ${servletContextCounter}</label>
-    <label> Session counter: ${servletSessionCounter}</label>
+    <%@ include file = "logout.jsp" %>
+    <%@ include file = "counters.jsp" %>
 
 </body>
 </html>
