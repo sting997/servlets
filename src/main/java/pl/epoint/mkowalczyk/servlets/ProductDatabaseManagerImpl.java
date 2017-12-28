@@ -1,5 +1,8 @@
 package pl.epoint.mkowalczyk.servlets;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,7 +23,7 @@ public class ProductDatabaseManagerImpl implements ProductManager {
     private static final String USER = "products";
     private static final String PASS = "password";
 
-    private boolean isDataSourceEnabled = false;
+    private boolean isDataSourceEnabled = true;
 
     private Connection getDirectConnection() throws ClassNotFoundException, IllegalAccessException,
             InstantiationException, SQLException {
@@ -28,12 +31,14 @@ public class ProductDatabaseManagerImpl implements ProductManager {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    private Connection getDataSourceConnection() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        return getDirectConnection(); //todo
+    private Connection getDataSourceConnection() throws SQLException,NamingException {
+        InitialContext initialContext = new InitialContext();
+        DataSource dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/products");
+        return dataSource.getConnection();
     }
 
     private Connection getConnection() throws ClassNotFoundException, SQLException,
-            InstantiationException, IllegalAccessException {
+            InstantiationException, IllegalAccessException, NamingException {
         if (isDataSourceEnabled)
             return getDataSourceConnection();
         else
@@ -47,7 +52,7 @@ public class ProductDatabaseManagerImpl implements ProductManager {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)
-        ){
+        ) {
             while (resultSet.next()) {
                 Integer PK = resultSet.getInt("id");
                 String name = resultSet.getString("name");
@@ -85,9 +90,9 @@ public class ProductDatabaseManagerImpl implements ProductManager {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()
         ) {
-                String query = "INSERT INTO products (name, price) " +
-                        "values ('" + product.getName() + "'," + product.getPrice() + ");";
-                statement.executeUpdate(query);
+            String query = "INSERT INTO products (name, price) " +
+                    "values ('" + product.getName() + "'," + product.getPrice() + ");";
+            statement.executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
