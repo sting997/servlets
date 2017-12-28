@@ -17,10 +17,10 @@
         <c:forEach var="product" items="${products}">
                 <tr>
                     <td>${product.PK}</td>
-                    <td> <a href="/servlets/edit?productId=${product.PK}"> ${product.name} </a> </td>
+                    <td> <a href="./edit?productId=${product.PK}"> ${product.name} </a> </td>
                     <td>${product.price}</td>
                     <td>
-                        <form action="/servlets/list?productId=${product.PK}" method="post">
+                        <form action="./list?productId=${product.PK}" method="post">
                             <button type="submit" OnClick="return confirm('Usunąć?')"> Usuń </button>
                         </form>
                     </td>
@@ -28,7 +28,7 @@
         </c:forEach>
     </table>
 
-    <form action="/servlets/edit?action=save_product" method="get">
+    <form action="./edit?action=save_product" method="get">
         <button type="submit"> Dodaj produkt </button>
     </form>
 

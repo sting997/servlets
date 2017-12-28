@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix ="c" %>
+<!DOCTYPE HTML>
 <html>
    <head>
       <title>Edytuj produkt</title>
@@ -5,7 +8,7 @@
    </head>
     <body>
             <c:choose>
-                <c:when test="${!empty productId}">
+                <c:when test="${not empty productId}">
                     <form method="post" action="edit?productId=${productId}&action=save_product">
                 </c:when>
                 <c:otherwise>

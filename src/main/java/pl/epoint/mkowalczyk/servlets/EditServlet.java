@@ -65,7 +65,8 @@ class EditServlet extends HttpServlet {
 
     private void setRequestAttributes(HttpServletRequest req) {
         Integer productID = getProductIdFromRequest(req);
-        req.setAttribute("productId", productID);
+        if (productID != null)
+            req.setAttribute("productId", productID);
         req.setAttribute("privateFieldCounter", privateFieldCounter);
     }
 
@@ -74,7 +75,7 @@ class EditServlet extends HttpServlet {
         if (requestProductId != null)
             return Integer.valueOf(requestProductId);
         else
-            return Integer.valueOf(0);
+            return null;
     }
 
     @Override
@@ -123,6 +124,6 @@ class EditServlet extends HttpServlet {
 
     private boolean isNewProduct(HttpServletRequest req) {
         String requestProductId = req.getParameter("productId");
-        return requestProductId == null || Integer.valueOf(requestProductId).equals(0);
+        return requestProductId == null;
     }
 }

@@ -25,6 +25,14 @@ public class ProductDatabaseManagerImpl implements ProductManager {
 
     private boolean isDataSourceEnabled = true;
 
+    private Connection getConnection() throws ClassNotFoundException, SQLException,
+            InstantiationException, IllegalAccessException, NamingException {
+        if (isDataSourceEnabled)
+            return getDataSourceConnection();
+        else
+            return getDirectConnection();
+    }
+
     private Connection getDirectConnection() throws ClassNotFoundException, IllegalAccessException,
             InstantiationException, SQLException {
         Class.forName(JDBC_DRIVER).newInstance();
@@ -35,14 +43,6 @@ public class ProductDatabaseManagerImpl implements ProductManager {
         InitialContext initialContext = new InitialContext();
         DataSource dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/products");
         return dataSource.getConnection();
-    }
-
-    private Connection getConnection() throws ClassNotFoundException, SQLException,
-            InstantiationException, IllegalAccessException, NamingException {
-        if (isDataSourceEnabled)
-            return getDataSourceConnection();
-        else
-            return getDirectConnection();
     }
 
     @Override
