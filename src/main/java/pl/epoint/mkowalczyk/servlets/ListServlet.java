@@ -19,7 +19,7 @@ import java.util.List;
 @WebServlet("/list")
 class ListServlet extends HttpServlet {
 
-    private ProductManager productManager = ProductMemoryManagerImpl.INSTANCE;
+    private ProductManager productManager = new ProductDatabaseManagerImpl();
     private int privateFieldCounter;
     private String LIST_JSP_PATH = "/WEB-INF/list.jsp";
 
@@ -72,7 +72,7 @@ class ListServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Integer productId = Integer.valueOf(req.getParameter("productId"));
         productManager.deleteProduct(productManager.getProductByPK(productId));
         resp.sendRedirect("list");
