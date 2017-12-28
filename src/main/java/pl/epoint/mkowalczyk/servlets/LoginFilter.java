@@ -11,7 +11,7 @@ import java.io.IOException;
 @WebFilter(urlPatterns = "/*")
 @WebServlet(urlPatterns = "/login")
 public class LoginFilter extends HttpServlet implements Filter {
-    private final String LOGIN_JSP_PATH = "/WEB-INF/login.jsp";
+    private static final String LOGIN_JSP_PATH = "/WEB-INF/login.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -21,8 +21,6 @@ public class LoginFilter extends HttpServlet implements Filter {
         else if (isLogoutAction(req)){
             performLogOut(req, resp);
         }
-        else
-            System.out.println("ddssd");
     }
 
     private void performLogOut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -67,7 +65,7 @@ public class LoginFilter extends HttpServlet implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 

@@ -17,9 +17,9 @@ import java.math.BigDecimal;
  */
 @WebServlet("/edit/*")
 class EditServlet extends HttpServlet {
-    private ProductManager productManager = ProductMemoryManagerImpl.INSTANCE;
+    private final ProductManager productManager = new ProductDatabaseManagerImpl();
     private int privateFieldCounter;
-    private final String EDIT_JSP_PATH = "/WEB-INF/edit.jsp";
+    private final static String EDIT_JSP_PATH = "/WEB-INF/edit.jsp";
 
     @Override
     public void init() {
